@@ -27,6 +27,9 @@ jobs:
           - "3.10"
           - "3.11"
           - "3.12"
+        pydantic-version:
+          - "pydantic-v1"
+          - "pydantic-v2"
       fail-fast: false
 
     steps:
@@ -58,9 +61,13 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: python -m poetry install
       - name: Lint
-        # Do not run on Python 3.7 as mypy behaves differently
-        if: matrix.python-version != '3.7'
         run: python -m poetry run bash scripts/lint.sh
+      - name: Install Pydantic v1
+        if: matrix.pydantic-version == 'pydantic-v1'
+        run: pip install "pydantic>=1.10.0,<2.0.0"
+      - name: Install Pydantic v2
+        if: matrix.pydantic-version == 'pydantic-v2'
+        run: pip install "pydantic>=2.0.2,<3.0.0"
       - run: mkdir coverage
       - name: Test
         run: python -m poetry run bash scripts/test.sh
@@ -72,6 +79,8 @@ jobs:
         with:
           name: coverage
           path: coverage
+      - name: Lint
+        run: python -m poetry run bash scripts/lint.sh
   coverage-combine:
     needs:
       - test

@@ -1,11 +1,12 @@
 from typing import Optional
 
 import pytest
+from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
 
 
 def test_missing_sql_type():
-    class CustomType:
+    class CustomType(BaseModel):
         @classmethod
         def __get_validators__(cls):
             yield cls.validate

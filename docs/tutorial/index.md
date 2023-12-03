@@ -67,6 +67,8 @@ Make sure you don't name it also `sqlmodel`, so that you don't end up overriding
 
 Make sure you have an officially supported version of Python.
 
+Currently it is **Python 3.7** and above (Python 3.6 was already deprecated).
+
 You can check which version you have with:
 
 <div class="termy">
@@ -82,10 +84,11 @@ There's a chance that you have multiple Python versions installed.
 
 You might want to try with the specific versions, for example with:
 
-* `python3.11`
 * `python3.12`
+* `python3.11`
 * `python3.10`
 * `python3.9`
+* `python3.8`
 
 The code would look like this:
 
