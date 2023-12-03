@@ -34,10 +34,10 @@ from sqlalchemy import (
     Numeric,
 )
 from sqlalchemy import Enum as sa_Enum
+from sqlalchemy.orm import Mapped
 from sqlalchemy.sql.sqltypes import LargeBinary, Time
 
 from .sql.sqltypes import GUID, AutoString
-from sqlalchemy.orm import Mapped
 
 IS_PYDANTIC_V2 = int(PYDANTIC_VERSION.split(".")[0]) >= 2
 

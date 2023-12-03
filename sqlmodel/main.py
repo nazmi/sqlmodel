@@ -20,14 +20,11 @@ from typing import (
 
 from pydantic import BaseModel
 from pydantic.fields import FieldInfo as PydanticFieldInfo
-from pydantic.utils import Representation
 from sqlalchemy import (
     Column,
     inspect,
 )
-from sqlalchemy import Enum as sa_Enum
 from sqlalchemy.orm import (
-    Mapped,
     RelationshipProperty,
     declared_attr,
     registry,
@@ -37,9 +34,6 @@ from sqlalchemy.orm.attributes import set_attribute
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 from sqlalchemy.orm.instrumentation import is_instrumented
 from sqlalchemy.sql.schema import MetaData
-from sqlalchemy.sql.sqltypes import LargeBinary, Time
-
-from .sql.sqltypes import GUID, AutoString
 
 from .compat import (
     IS_PYDANTIC_V2,
@@ -64,7 +58,10 @@ from .compat import (
 if not IS_PYDANTIC_V2:
     from pydantic.errors import ConfigError, DictError
     from pydantic.main import validate_model
-    from pydantic.utils import ROOT_KEY
+    from pydantic.utils import ROOT_KEY, Representation
+else:
+    from pydantic.v1.utils import ROOT_KEY, Representation
+
 
 _T = TypeVar("_T")
 
@@ -698,7 +695,9 @@ class SQLModel(BaseModel, metaclass=SQLModelMetaclass, registry=default_registry
         def validate(cls: Type[_TSQLModel], value: Any) -> _TSQLModel:
             if isinstance(value, cls):
                 return (
-                    value.copy() if cls.__config__.copy_on_model_validation else value  # noqa
+                    value.copy()
+                    if cls.__config__.copy_on_model_validation
+                    else value  # noqa
                 )
 
             value = cls._enforce_dict_if_root(value)
